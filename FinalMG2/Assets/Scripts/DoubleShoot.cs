@@ -12,4 +12,12 @@ public class DoubleShoot : PowerUpEffect
             gun.ActivateDoubleShoot();
         }
     }
+
+    public override void RemoveEffect(GunCTRL gun)
+    {
+        if (gun != null)
+        {
+            gun.ResetPowerUps();
+        }
+    }
 }

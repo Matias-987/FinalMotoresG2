@@ -6,9 +6,6 @@ using UnityEngine.SceneManagement;
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
-    public List <GameObject> projectilePool;
-    [SerializeField] private GameObject projectilePrefab;
-    [SerializeField] public int poolSize = 20;
     public static bool isRestarting = false;
     private void Awake()
     {
@@ -16,20 +13,8 @@ public class GameManager : MonoBehaviour
         {
             Instance = this;
             SceneManager.sceneLoaded += OnSceneReloaded;
-            InitializePool();
         }
         else Destroy(gameObject);
-    }
-
-    private void InitializePool()
-    {
-        projectilePool = new List<GameObject>();
-        for (int i = 0; i < poolSize; i++)
-        {
-            GameObject obj = Instantiate(projectilePrefab);
-            obj.SetActive(false);
-            projectilePool.Add(obj);
-        }
     }
     public static void Restart()
     {

@@ -13,9 +13,11 @@ GameObject:
   - component: {fileID: 89227089534633087}
   - component: {fileID: 2261157039714410250}
   - component: {fileID: -5250231204085883854}
+  - component: {fileID: -3467572066752176930}
+  - component: {fileID: -7819647195893720711}
   m_Layer: 0
   m_Name: Enemy
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -135,3 +137,55 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 80
   m_CollisionDetection: 0
+--- !u!114 &-3467572066752176930
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3086889187265889601}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0db9200ad3708ba45a2ab0d60ab2909d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  attackDamage: 10
+  powerUpPrefabs:
+  - {fileID: 6619968673735441233, guid: b0bf262da779e374cabd11782c762c54, type: 3}
+  moveSpeed: 50
+  angularSpeed: 120
+  acceleration: 8
+  player: {fileID: 0}
+  navMeshAgent: {fileID: -7819647195893720711}
+  attackCooldown: 2
+  currentAttackCooldown: 0
+  maxHealth: 50
+  currentHealth: 0
+  attackRange: 2
+  isAttacking: 0
+  powerUpGenerated: 0
+  dropChance: 1
+  powerUpPrefab: {fileID: 6619968673735441233, guid: b0bf262da779e374cabd11782c762c54,
+    type: 3}
+--- !u!195 &-7819647195893720711
+NavMeshAgent:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3086889187265889601}
+  m_Enabled: 1
+  m_AgentTypeID: 0
+  m_Radius: 0.5
+  m_Speed: 50
+  m_Acceleration: 8
+  avoidancePriority: 50
+  m_AngularSpeed: 120
+  m_StoppingDistance: 0
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 1
+  m_AutoRepath: 1
+  m_Height: 2
+  m_BaseOffset: 1
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 4

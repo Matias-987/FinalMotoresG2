@@ -19,10 +19,16 @@ public class GunCTRL : MonoBehaviour
     [SerializeField] private Transform cameraTransform;
     [SerializeField] private Vector3 positionOffset = new Vector3(0.3f, -0.2f, 0.5f);
 
-    private bool doubleShootActive = false;
+    public bool doubleShootActive = false;
+    public bool missilesActive = false;
+    public int powerUpCount = 0;
+
+    public GameObject missilePrefab;
+    private float nextMissileTime;
 
     void Start()
     {
+        nextMissileTime = 0f;
         currentZoom = normalFOV;
         Cursor.lockState = CursorLockMode.Locked;
     }
@@ -40,11 +46,8 @@ public class GunCTRL : MonoBehaviour
         {
             FireProjectile();
             lastFireTime = Time.time;
-            if(!doubleShootActive)
-            {
-                Vector3 offset = new Vector3(0, 0.5f, 0);
-                Instantiate(projectilePrefab, cameraTransform.position + offset, cameraTransform.rotation);
-            }
+            if (doubleShootActive == true) DoubleShoot();
+            if (missilesActive) ShootMissile();
         }
     }
 
@@ -60,16 +63,39 @@ public class GunCTRL : MonoBehaviour
         GameObject pro = Instantiate(projectilePrefab, ray.origin, Quaternion.LookRotation(shootDirection));
 
         Projectile projectileScript = pro.GetComponent<Projectile>();
+
         if (projectileScript != null)
         {
             projectileScript.speed = 15f;
         }
     }
 
+    private void DoubleShoot()
+    {
+        Vector3 offset = new Vector3(0, 0.5f, 0);
+        Instantiate(projectilePrefab, cameraTransform.position + offset, cameraTransform.rotation);
+    }
+
+    private void ShootMissile()
+    {
+        const float missileCooldown = 2f;
+        if (Time.time > nextMissileTime)
+        {
+            Instantiate(missilePrefab, transform.position, Quaternion.Euler(0, 0, 45));
+            nextMissileTime = Time.time + missileCooldown;
+        }
+    }
+
     public void ActivateDoubleShoot()
     {
         doubleShootActive = true;
+        Debug.Log("Disparo doble activado");
     }
+
+    public void ActivateMissiles()
+    {
+        missilesActive = true;
+    } 
 
     private void HandleZoom()
     {
@@ -92,5 +118,7 @@ public class GunCTRL : MonoBehaviour
     public void ResetPowerUps()
     {
         doubleShootActive = false;
+        missilesActive = false;
+        powerUpCount = 0;
     }
 }

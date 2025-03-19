@@ -46,35 +46,60 @@ public class Instantiator: MonoBehaviour
 
     public void ReportEnemyDeath(GameObject enemy)
     {
-        enemiesRemaining--;
-        currentEnemies.Remove(enemy);
-
-        if (enemiesRemaining <= 0)
         {
-            waveActive = false;
+            if (currentEnemies.Contains(enemy))
+            {
+                currentEnemies.Remove(enemy);
+                enemiesRemaining = currentEnemies.Count;
+                Debug.Log($"Enemigos restantes: {enemiesRemaining}");
+
+                if (enemiesRemaining <= 0)
+                {
+                    waveActive = false;
+                    StartNextWave();
+                }
+            }
         }
     }
 
     private void StartNextWave()
     {
         waveActive = true;
-        int enemiesToSpawn = baseEnemies * (int)Mathf.Pow(2, currentWave - 1);
-        StartCoroutine(SpawnWave(enemiesToSpawn));
+        int enemiesPerSpawnPoint = baseEnemies * (int)Mathf.Pow(2, currentWave - 1);
+        int totalEnemies = enemiesPerSpawnPoint * spawnPoints.Count;
+
+        StartCoroutine(SpawnWave(totalEnemies));
         currentWave++;
     }
 
     IEnumerator SpawnWave(int totalEnemies)
     {
-        for (int i = 0; i < totalEnemies; i++)
+        enemiesRemaining = totalEnemies;
+        currentEnemies.Clear();
+
+        int enemiesPerPoint = Mathf.CeilToInt((float)totalEnemies / spawnPoints.Count);
+
+        foreach (Transform spawnPoint in spawnPoints)
         {
-            Transform spawnPoint = spawnPoints[Random.Range(0, spawnPoints.Count)];
-            Vector3 spawnPosition = spawnPoint.position + new Vector3(Random.Range(-2f, 2f), Random.Range(-2f, 2f), 0);
+            for (int i = 0; i < enemiesPerPoint; i++)
+            {
+                if (enemiesRemaining <= 0) yield break;
+                Vector3 spawnPos = spawnPoint.position + new Vector3(  Random.Range(-2f, 2f), Random.Range(-2f, 2f), 0);
 
-            GameObject enemy = Instantiate(enemyPrefabs[Random.Range(0, enemyPrefabs.Count)], spawnPosition, Quaternion.identity);
+                GameObject enemy = Instantiate( enemyPrefabs[Random.Range(0, enemyPrefabs.Count)], spawnPos, Quaternion.identity);
 
-            RegisterEnemy(enemy);
+                RegisterEnemy(enemy);
+                enemiesRemaining--;
+                yield return new WaitForSeconds(0.5f);
+            }
+        }
+    }
 
-            yield return new WaitForSeconds(0.5f);
+    private void OnDestroy()
+    {
+        if(!GameManager.isRestarting && Instantiator.Instance != null)
+        {
+            Instantiator.Instance.ReportEnemyDeath(gameObject);
         }
     }
 }

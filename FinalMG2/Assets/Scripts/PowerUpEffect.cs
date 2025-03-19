@@ -6,10 +6,14 @@ using UnityEngine;
 public class PowerUpEffect : ScriptableObject
 {
     public string effectName;
-    public Sprite icon;
 
     public virtual void ApplyEffect(GunCTRL gun)
     {
         
+    }
+
+    public virtual void RemoveEffect(GunCTRL gun)
+    {
+
     }
 }

@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class Projectile : MonoBehaviour
 {
-    public float speed = 30f;
-    public float lifespan = 2f;
-    public float damageAmount = 25f;
-    private Rigidbody rb;
+    [SerializeField] public float speed = 30f;
+    [SerializeField] public float lifespan = 2f;
+    [SerializeField] public float damageAmount = 25f;
+    [SerializeField] private Rigidbody rb;
 
     private void Start()
     {
@@ -26,11 +26,7 @@ public class Projectile : MonoBehaviour
         if (collision.gameObject.CompareTag("Enemy"))
         {
             EnemyCTRL enemy = collision.gameObject.GetComponent<EnemyCTRL>();
-
-            if (enemy != null)
-            {
-                enemy.TakeDamage(damageAmount);
-            }
+            if (enemy != null) enemy.TakeDamage(damageAmount);
         }
         Destroy(gameObject);
     }

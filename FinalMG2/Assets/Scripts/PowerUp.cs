@@ -12,14 +12,23 @@ public class PowerUp : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             GunCTRL gun = other.GetComponentInChildren<GunCTRL>();
-            ApplyRandomEffect(gun);
-            Destroy(gameObject);
+            if (gun != null && possibleEffects.Length > 0)
+            {
+                ApplyRandomEffect(gun);
+                Destroy(gameObject);
+            }
         }
     }
 
     private void ApplyRandomEffect(GunCTRL gun)
     {
-        PowerUpEffect selected = possibleEffects[Random.Range(0, possibleEffects.Length)];
-        selected.ApplyEffect(gun);
+        int randomIndex = Random.Range(0, possibleEffects.Length);
+        PowerUpEffect selectedEffect = possibleEffects[randomIndex];
+
+        if (selectedEffect != null)
+        {
+            selectedEffect.ApplyEffect(gun);
+            Debug.Log($"Efecto aplicado: {selectedEffect.effectName}");
+        }
     }
 }

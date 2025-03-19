@@ -71,7 +71,7 @@ public class PlayerCTRL : MonoBehaviour
     public void TakeDamage(float damage)
     {
         currentHealth -= damage;
-        if(currentHealth <= 0 && Time.timeScale > 0)
+        if(currentHealth <= 0)
         {
             Die();
         }
@@ -79,7 +79,12 @@ public class PlayerCTRL : MonoBehaviour
 
     private void Die()
     {
+        GetComponentInChildren<GunCTRL>()?.ResetPowerUps();
+        GunCTRL gun = GetComponentInChildren<GunCTRL>();
+        if (gun != null) gun.ResetPowerUps();
+
         Time.timeScale = 0;
+        Debug.Log("Jugador muerto. Power-ups reseteados");
     }
 
     public static void ResetStaticInstance()
@@ -100,6 +105,20 @@ public class PlayerCTRL : MonoBehaviour
         if (collision.gameObject.CompareTag("Ground"))
         {
             isGrounded = false;
+        }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("PowerUp"))
+        {
+            GunCTRL gun = GetComponentInChildren<GunCTRL>();
+
+            if(gun != null)
+            {
+                gun.powerUpCount++;
+                Destroy(other.gameObject);
+            }
         }
     }
 }
