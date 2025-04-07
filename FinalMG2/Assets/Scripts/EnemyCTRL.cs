@@ -10,7 +10,7 @@ public class EnemyCTRL : MonoBehaviour
     [SerializeField] public float attackDamage = 10f;
     [SerializeField] public List<GameObject> powerUpPrefabs;
     [SerializeField] public float moveSpeed = 3f;
-    [SerializeField] public float angularSpeed = 120f;
+    [SerializeField] public float angularSpeed = 240f;
     [SerializeField] public float acceleration = 8f;
     [SerializeField] private Transform player;
     [SerializeField] private NavMeshAgent navMeshAgent;
@@ -18,7 +18,7 @@ public class EnemyCTRL : MonoBehaviour
     [SerializeField] private float currentAttackCooldown;
     [SerializeField] public float maxHealth = 50f;
     [SerializeField] private float currentHealth;
-    [SerializeField] private float attackRange = 2f;
+    [SerializeField] private float attackRange = 3f;
     [SerializeField] private bool isAttacking = false;
     [SerializeField] private bool powerUpGenerated = false;
     [SerializeField][Range(0, 1)] private float dropChance = 1f;
@@ -35,7 +35,7 @@ public class EnemyCTRL : MonoBehaviour
         navMeshAgent.acceleration = acceleration;
         currentHealth = maxHealth;
         Instantiator.Instance.RegisterEnemy(gameObject);
-        navMeshAgent.stoppingDistance = attackRange;
+        navMeshAgent.stoppingDistance = attackRange - 1f;
     }
 
     private void InitializeComponents()
@@ -50,6 +50,8 @@ public class EnemyCTRL : MonoBehaviour
     private void Update()
     {
         if (player == null || navMeshAgent == null) return;
+
+        navMeshAgent.SetDestination(player.position);
 
         float distanceToPlayer = Vector3.Distance(transform.position, player.position);
 

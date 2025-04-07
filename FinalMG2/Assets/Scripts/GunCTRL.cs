@@ -18,6 +18,7 @@ public class GunCTRL : MonoBehaviour
 
     [SerializeField] private Transform cameraTransform;
     [SerializeField] private Vector3 positionOffset = new Vector3(0.3f, -0.2f, 0.5f);
+    [SerializeField] private Transform firePoint;
 
     public bool doubleShootActive = false;
     public bool missilesActive = false;
@@ -57,23 +58,17 @@ public class GunCTRL : MonoBehaviour
         Vector3 shootDirection = ray.direction;
 
         Vector3 spreadOffset = new Vector3(Random.Range(-spread, spread), Random.Range(-spread, spread), Random.Range(-spread, spread));
-
         shootDirection = (shootDirection + spreadOffset).normalized;
 
-        GameObject pro = Instantiate(projectilePrefab, ray.origin, Quaternion.LookRotation(shootDirection));
-
-        Projectile projectileScript = pro.GetComponent<Projectile>();
-
-        if (projectileScript != null)
-        {
-            projectileScript.speed = 15f;
-        }
+        GameObject pro = Instantiate( projectilePrefab, firePoint.position, Quaternion.LookRotation(shootDirection));
     }
 
     private void DoubleShoot()
     {
-        Vector3 offset = new Vector3(0, 0.5f, 0);
-        Instantiate(projectilePrefab, cameraTransform.position + offset, cameraTransform.rotation);
+        if (firePoint == null) return;
+
+        Vector3 offset = firePoint.right * 0.2f;
+        Instantiate(projectilePrefab, firePoint.position + offset, firePoint.rotation);
     }
 
     private void ShootMissile()
